@@ -29,7 +29,7 @@ int ds_create(char* filename, long size) {
   }
 
   /* Write additional bytes set into file*/
-  long c = 0;
+  char c = 0;
   if (fwrite(&c, sizeof(c), size, ds_file.fp) != size) {
     return 3;
   }
@@ -43,15 +43,40 @@ int ds_create(char* filename, long size) {
 
 int ds_init (char* filename) {
 
-  /* TODO: Do we only open or create/open file?*/
   if ((ds_file.fp = fopen(filename, "rb+")) == NULL) {
-    return 1;
+    return 5;
   }
 
+  if (fread(&ds_file.block, sizeof(ds_file.block), 1, ds_file.fp) < 1) {
+    return 6;
+  }
+
+  /*
+  for (i = 0; i < MAX_BLOCKS; i++) {
+    if (fread(&ds_file.block[i].start, sizeof(ds_file.block[i].start), 1, ds_file.fp) < 1) {
+      return 6;
+    }
+    if (fread(&ds_file.block[i].length, sizeof(ds_file.block[i].length), 1, ds_file.fp) < 1) {
+      return 7;
+    }
+    if (fread(&ds_file.block[i].alloced, sizeof(ds_file.block[i].alloced), 1, ds_file.fp) < 1){
+      return 8;
+    }
+  }
+*/
   ds_counts.reads = 0;
   ds_counts.writes = 0;
 
   return 0;
+}
+
+void ds_test_init() {
+
+  int i;
+  for (i = 0; i < MAX_BLOCKS; i++) {
+    printf("%d: %lu, %lu, %d ", i, ds_file.block[i].start, ds_file.block[i].length, ds_file.block[i].alloced);
+  }
+  printf("\nReads: %d\nWrites: %d\n", ds_counts.reads, ds_counts.writes);
 }
 
 long ds_malloc(long amount) {
