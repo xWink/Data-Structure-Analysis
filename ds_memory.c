@@ -60,10 +60,13 @@ int ds_init (char* filename) {
 void ds_test_init() {
 
   int i;
-  for (i = 0; i < MAX_BLOCKS; i++) {
-    printf("%d: %lu, %lu, %d ", i, ds_file.block[i].start, ds_file.block[i].length, ds_file.block[i].alloced);
+  for (i = 0; i < 100; i++) {
+    printf("%d: %lu, %lu, %d      ", i, ds_file.block[i].start, ds_file.block[i].length, ds_file.block[i].alloced);
+    if (i % 3 == 0 && i != 0) {
+      printf("\n");
+    }
   }
-  printf("\nReads: %d\nWrites: %d\n", ds_counts.reads, ds_counts.writes);
+  printf("\nreads: %d\nwrites: %d\n", ds_counts.reads, ds_counts.writes);
 }
 
 long ds_malloc(long amount) {
