@@ -6,6 +6,7 @@ struct ds_counts_struct ds_counts;
 int ds_create(char* filename, long size) {
 
   int i;
+  char c = 0;
 
   /* Create file*/
   if ((ds_file.fp = fopen(filename, "wb")) == NULL) {
@@ -29,7 +30,6 @@ int ds_create(char* filename, long size) {
   }
 
   /* Write additional bytes set into file*/
-  char c = 0;
   if (fwrite(&c, sizeof(c), size, ds_file.fp) != size) {
     return 3;
   }

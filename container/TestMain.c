@@ -1,4 +1,4 @@
-#include "ds_memory.c"
+#include "ds_memory.h"
 
 int main(){
 
