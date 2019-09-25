@@ -10,15 +10,17 @@ int ds_create_array() {
     return 1;
   }
   elements = 0;
-  start = ds_malloc(sizeof(long));
-  if (ds_write(start, &elements, sizeof(elements)) == -1) {
+  if ((start = ds_malloc(sizeof(long))) == -1) {
     return 2;
   }
-  if (ds_malloc(sizeof(int)*MAX_ELEMENTS) == -1) {
+  if (ds_write(start, &elements, sizeof(elements)) == -1) {
     return 3;
   }
-  if (ds_finish() != 0) {
+  if (ds_malloc(sizeof(int)*MAX_ELEMENTS) == -1) {
     return 4;
+  }
+  if (ds_finish() != 0) {
+    return 5;
   }
   return 0;
 }
@@ -37,22 +39,29 @@ int ds_init_array() {
 int ds_replace(int value, long index) {
   return 0;
 }
+
 int ds_insert(int value, long index) {
   int old;
   int new;
   int i;
-  int start = index * sizeof(int) + sizeof(elements);
 
   if (index > MAX_ELEMENTS) {
     return 1;
   }
+  
+  new = value;
 
-  for (i = start; i < elements * sizeof(int) + sizeof(elements); i++) {
-    ds_read(&old, i, sizeof(int));
-    ds_write(i, (i == start ? &value : &new), sizeof(int));
+  for (i = index; i <= elements; i++) {
+    if (ds_read(&old, i * sizeof(int) + sizeof(elements), sizeof(int)) == NULL) {
+      return 2;
+    }
+    if (ds_write(i * sizeof(int) + sizeof(elements), &new, sizeof(int)) == -1) {
+      return 3;
+    }
     new = old;
   }
 
+  elements++;
   return 0;
 }
 int ds_delete() {
@@ -67,8 +76,23 @@ long ds_find(int target) {
 int ds_read_elements(char *filename) {
   return 0;
 }
+
+void create_array() {
+  ds_create("array.bin", 2048);
+  ds_create_array();
+}
+
+void show_array() {
+  ds_test_init();
+  printf("elements = %ld\n", elements);
+}
+
 int ds_finish_array() {
-  ds_write(0, &elements, sizeof(elements));
-  ds_finish();
+  if (ds_write(0, &elements, sizeof(elements)) == -1) {
+    return 1;
+  }
+  if (ds_finish() != 0) {
+    return 2;
+  }
   return 0;
 }

@@ -3,7 +3,8 @@
 
 int main(int argc, char **argv) {
 
-  int value;
+
+int value;
   long index;
 
   if (argc != 3) {
@@ -13,9 +14,13 @@ int main(int argc, char **argv) {
 
   value = atoi(argv[1]);
   index = atoi(argv[2]);
+  create_array();
 
-  /*ds_create_array();*/
   ds_init_array();
+  show_array();
   ds_insert(value, index);
+  /*show_array();*/
+  ds_finish_array();
+
   return 0;
 }
