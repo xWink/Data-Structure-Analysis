@@ -38,6 +38,21 @@ int ds_replace(int value, long index) {
   return 0;
 }
 int ds_insert(int value, long index) {
+  int old;
+  int new;
+  int i;
+  int start = index * sizeof(int) + sizeof(elements);
+
+  if (index > MAX_ELEMENTS) {
+    return 1;
+  }
+
+  for (i = start; i < elements * sizeof(int) + sizeof(elements); i++) {
+    ds_read(&old, i, sizeof(int));
+    ds_write(i, (i == start ? &value : &new), sizeof(int));
+    new = old;
+  }
+
   return 0;
 }
 int ds_delete() {
