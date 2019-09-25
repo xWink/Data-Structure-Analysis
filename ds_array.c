@@ -53,5 +53,7 @@ int ds_read_elements(char *filename) {
   return 0;
 }
 int ds_finish_array() {
+  ds_write(0, &elements, sizeof(elements));
+  ds_finish();
   return 0;
 }

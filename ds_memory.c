@@ -136,6 +136,7 @@ long ds_write(long start, void* ptr, long bytes) {
     return -1;
   }
   ds_counts.writes++;
+
   return start;
 }
 
