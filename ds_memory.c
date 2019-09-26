@@ -41,6 +41,7 @@ int ds_create(char* filename, long size) {
   return 0;
 }
 
+
 int ds_init (char* filename) {
 
   if ((ds_file.fp = fopen(filename, "rb+")) == NULL) {
@@ -57,6 +58,7 @@ int ds_init (char* filename) {
   return 0;
 }
 
+
 void ds_test_init() {
 
   int i;
@@ -68,6 +70,7 @@ void ds_test_init() {
   }
   printf("\nreads: %d\nwrites: %d\n", ds_counts.reads, ds_counts.writes);
 }
+
 
 long ds_malloc(long amount) {
 
@@ -103,6 +106,7 @@ long ds_malloc(long amount) {
   return startOfBlock;
 }
 
+
 void ds_free(long start) {
 
   int i;
@@ -115,6 +119,7 @@ void ds_free(long start) {
   }
 }
 
+
 void *ds_read(void *ptr, long start, long bytes) {
 
   if (fseek(ds_file.fp, sizeof(ds_file.block) + start, SEEK_SET) != 0) {
@@ -126,6 +131,7 @@ void *ds_read(void *ptr, long start, long bytes) {
   ds_counts.reads++;
   return ptr;
 }
+
 
 long ds_write(long start, void* ptr, long bytes) {
 
@@ -140,13 +146,19 @@ long ds_write(long start, void* ptr, long bytes) {
   return start;
 }
 
+
 int ds_finish() {
 
   if (fseek(ds_file.fp, 0, SEEK_SET) != 0) {
     return 1;
   }
+
   if (fwrite(&ds_file.block, sizeof(ds_file.block), 1, ds_file.fp) != 1) {
     return 2;
+  }
+
+  if (fclose(ds_file.fp) != 0) {
+    return 3;
   }
 
   printf("reads: %d\n",ds_counts.reads);
