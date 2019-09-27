@@ -29,9 +29,9 @@ int ds_insert(int value, long index) {
   long previousLoc = 0;
   int i;
 
-  ds_read(&previous.next, 0, sizeof(previous.next));
+  ds_read(&(previous.next), 0, sizeof(previous.next));
 
-  for (i = index; i > 0; i--) {
+  for (i = index; i != 0; i--) {
     if (previous.next == -1) {
       return -1;
     }
@@ -44,15 +44,12 @@ int ds_insert(int value, long index) {
 
   previous.next = ds_malloc(sizeof(new));
   ds_write(previous.next, &new, sizeof(new));
-  if (index == 0) {
-    ds_write(0, &previous.next, sizeof(previous.next));
-  }
 
-  if (previousLoc == 0 && new.next != -1) {
-    return -2;
+  if (previousLoc == 0) {
+    ds_write(previousLoc, &(previous.next), sizeof(previous.next));
+  } else {
+    ds_write(previousLoc, &previous, sizeof(previous));
   }
-
-  ds_write(previousLoc, &previous, sizeof(previous));
 
   return 0;
 }
@@ -74,9 +71,8 @@ void show_list() {
 
   for (i = 0; i < 10; i++) {
     ds_read(&li, loc, sizeof(li));
-    if ((loc = li.next) != -1) {
-      printf("Next: %ld, Item: %d\n", li.next, li.item);
-    }
+    printf("Next: %ld, Item: %d\n", li.next, li.item);
+    loc = li.next;
   }
 }
 

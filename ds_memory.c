@@ -125,7 +125,7 @@ void *ds_read(void *ptr, long start, long bytes) {
   if (fseek(ds_file.fp, sizeof(ds_file.block) + start, SEEK_SET) != 0) {
     return NULL;
   }
-  if (fread(ptr, 1, bytes, ds_file.fp) < bytes) {
+  if (fread(ptr, bytes, 1, ds_file.fp) < 1) {
     return NULL;
   }
   ds_counts.reads++;
@@ -138,7 +138,7 @@ long ds_write(long start, void* ptr, long bytes) {
   if (fseek(ds_file.fp, sizeof(ds_file.block) + start, SEEK_SET) != 0) {
     return -1;
   }
-  if (fwrite(ptr, 1, bytes, ds_file.fp) < bytes) {
+  if (fwrite(ptr, bytes, 1, ds_file.fp) < 1) {
     return -1;
   }
   ds_counts.writes++;
