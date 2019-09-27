@@ -84,7 +84,6 @@ int ds_insert(int value, long index) {
   return 0;
 }
 
-/*TODO: DO WE NEED TO SET THE VALUES TO ZERO OR CAN WE LEAVE THEM?*/
 int ds_delete(long index) {
   int old;
   int new;
@@ -149,7 +148,7 @@ long ds_find(int target) {
   return -1;
 }
 
-/*TODO: DO WE INSERT AT THE END OR BEGINNING OF ARRAY?*/
+/*ASSUMING THIS IS THE CORRECT ORDER AND LOCATION FOR INSERT*/
 int ds_read_elements(char *filename) {
 
   int val;

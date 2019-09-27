@@ -19,7 +19,29 @@ int ds_init_list() {
 }
 
 
-int ds_replace(int value, long index);
+int ds_replace(int value, long index) {
+
+  struct ds_list_item_struct previous;
+  struct ds_list_item_struct new;
+  int i;
+
+  ds_read(&(previous.next), 0, sizeof(previous.next));
+
+  for (i = index; i > 0; i--) {
+    if (previous.next == -1) {
+      return -1;
+    }
+    ds_read(&previous, previous.next, sizeof(previous));
+  }
+
+  ds_read(&new, previous.next, sizeof(new));
+  new.item = value;
+
+  if (ds_write(previous.next, &new, sizeof(new)) == -1) {
+    return 2;
+  }
+  return 0;
+}
 
 
 int ds_insert(int value, long index) {
@@ -31,7 +53,7 @@ int ds_insert(int value, long index) {
 
   ds_read(&(previous.next), 0, sizeof(previous.next));
 
-  for (i = index; i != 0; i--) {
+  for (i = index; i > 0; i--) {
     if (previous.next == -1) {
       return -1;
     }
@@ -55,25 +77,66 @@ int ds_insert(int value, long index) {
 }
 
 
-int ds_delete(long index);
+int ds_delete(long index) {
+
+  struct ds_list_item_struct previous;
+  struct ds_list_item_struct target;
+  long previousLoc;
+  int i;
+
+  ds_read(&(previous.next), 0, sizeof(previous.next));
+
+  for (i = index; i > 0; i--) {
+    if (previous.next == -1) {
+      return -1;
+    }
+    previousLoc = previous.next;
+    ds_read(&previous, previous.next, sizeof(previous));
+  }
+
+  ds_read(&target, previous.next, sizeof(target));
+  ds_free(previous.next);
+  previous.next = target.next;
+
+  if (ds_write(previousLoc, &previous, sizeof(previous)) == -1) {
+    return 2;
+  }
+  return 0;
+}
+
+
 int ds_swap(long index1, long index2);
 long ds_find(int target);
-int ds_read_elements(char *filename);
+
+
+/*ASSUMING THIS IS THE CORRECT ORDER FOR INSERT*/
+int ds_read_elements(char *filename) {
+
+  int val;
+  FILE *fp = fopen(filename, "r");
+
+  while (fscanf(fp, "%d", &val) != EOF) {
+    if (ds_insert(val, 0) != 0) {
+      return 1;
+    }
+  }
+
+  return 0;
+}
 
 void show_list() {
 
   struct ds_list_item_struct li;
   long loc;
-  int i;
 
   ds_test_init();
   ds_read(&loc, 0, sizeof(loc));
 
-  for (i = 0; i < 10; i++) {
+  do {
     ds_read(&li, loc, sizeof(li));
     printf("Next: %ld, Item: %d\n", li.next, li.item);
     loc = li.next;
-  }
+  } while (loc != -1);
 }
 
 
