@@ -1,15 +1,28 @@
 #include "ds_memory.h"
 #include "ds_list.h"
 
-void ds_create_list() {
+int ds_create_list() {
 
     long value = -1;
     long start;
 
-    ds_init("list.bin");
-    start = ds_malloc(sizeof(value));
-    ds_write(start, &value, sizeof(value));
-    ds_finish();
+    if (ds_init("list.bin") != 0) {
+      return 1;
+    }
+
+    if ((start = ds_malloc(sizeof(value))) == -1) {
+      return 2;
+    }
+
+    if (ds_write(start, &value, sizeof(value)) == -1) {
+      return 3;
+    }
+
+    if (ds_finish() != 0) {
+      return 4;
+    }
+
+    return 0;
 }
 
 
@@ -25,21 +38,30 @@ int ds_replace(int value, long index) {
   struct ds_list_item_struct new;
   int i;
 
-  ds_read(&(previous.next), 0, sizeof(previous.next));
+  if (ds_read(&(previous.next), 0, sizeof(previous.next)) == NULL) {
+    return 1;
+  }
 
   for (i = index; i > 0; i--) {
     if (previous.next == -1) {
-      return -1;
+      return 2;
     }
-    ds_read(&previous, previous.next, sizeof(previous));
+
+    if (ds_read(&previous, previous.next, sizeof(previous)) == NULL) {
+      return 3;
+    }
   }
 
-  ds_read(&new, previous.next, sizeof(new));
+  if (ds_read(&new, previous.next, sizeof(new)) == NULL) {
+    return 4;
+  }
+
   new.item = value;
 
   if (ds_write(previous.next, &new, sizeof(new)) == -1) {
-    return 2;
+    return 5;
   }
+
   return 0;
 }
 
@@ -51,26 +73,43 @@ int ds_insert(int value, long index) {
   long previousLoc = 0;
   int i;
 
-  ds_read(&(previous.next), 0, sizeof(previous.next));
+  if (index < 0) {
+    return 1;
+  }
+
+  if (ds_read(&(previous.next), 0, sizeof(previous.next)) == NULL) {
+    return 2;
+  }
 
   for (i = index; i > 0; i--) {
     if (previous.next == -1) {
-      return -1;
+      return 3;
     }
     previousLoc = previous.next;
-    ds_read(&previous, previous.next, sizeof(previous));
+    if (ds_read(&previous, previous.next, sizeof(previous)) == NULL) {
+      return 4;
+    }
   }
 
   new.item = value;
   new.next = previous.next;
 
-  previous.next = ds_malloc(sizeof(new));
-  ds_write(previous.next, &new, sizeof(new));
+  if ((previous.next = ds_malloc(sizeof(new))) == -1) {
+    return 5;
+  }
+
+  if (ds_write(previous.next, &new, sizeof(new)) == -1) {
+    return 6;
+  }
 
   if (previousLoc == 0) {
-    ds_write(previousLoc, &(previous.next), sizeof(previous.next));
+    if (ds_write(previousLoc, &(previous.next), sizeof(previous.next)) == -1) {
+      return 7;
+    }
   } else {
-    ds_write(previousLoc, &previous, sizeof(previous));
+    if (ds_write(previousLoc, &previous, sizeof(previous)) == -1) {
+      return 8;
+    }
   }
 
   return 0;
@@ -84,23 +123,50 @@ int ds_delete(long index) {
   long previousLoc;
   int i;
 
-  ds_read(&(previous.next), 0, sizeof(previous.next));
+  if (index < 0) {
+    return 1;
+  }
+
+  if (ds_read(&(previous.next), 0, sizeof(previous.next)) == NULL) {
+    return 2;
+  }
+
+  if (index == 0) {
+    if (ds_read(&target, previous.next, sizeof(target)) == NULL) {
+      return 3;
+    }
+
+    ds_free(previous.next);
+
+    if (ds_write(0, &target.next, sizeof(target.next)) == -1) {
+      return 4;
+    }
+
+    return 0;
+  }
 
   for (i = index; i > 0; i--) {
     if (previous.next == -1) {
-      return -1;
+      return 5;
     }
     previousLoc = previous.next;
-    ds_read(&previous, previous.next, sizeof(previous));
+    if (ds_read(&previous, previous.next, sizeof(previous)) == NULL) {
+      return 6;
+    }
   }
 
-  ds_read(&target, previous.next, sizeof(target));
+  if (ds_read(&target, previous.next, sizeof(target)) == NULL) {
+    return 7;
+  }
+
   ds_free(previous.next);
+
   previous.next = target.next;
 
   if (ds_write(previousLoc, &previous, sizeof(previous)) == -1) {
-    return 2;
+    return 8;
   }
+  
   return 0;
 }
 
@@ -109,7 +175,7 @@ int ds_swap(long index1, long index2);
 long ds_find(int target);
 
 
-/*ASSUMING THIS IS THE CORRECT ORDER FOR INSERT*/
+/*TODO: SAY ASSUMING THIS IS THE CORRECT ORDER FOR INSERT*/
 int ds_read_elements(char *filename) {
 
   int val;

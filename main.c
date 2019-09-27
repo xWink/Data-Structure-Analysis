@@ -7,8 +7,8 @@ int main(int argc, char **argv) {
   ds_create_list();*/
 
   printf("init: %d\n",ds_init_list());
-  printf("delete: %d\n", ds_delete(8));
-  /*ds_read_elements("textfile");*/
+  printf("delete: %d\n", ds_delete(0));
+
   /*printf("replace: %d\n",ds_replace(111, 3));*/
   /*printf("insert: %d\n",ds_insert(0,0));
   printf("insert: %d\n",ds_insert(1,1));
