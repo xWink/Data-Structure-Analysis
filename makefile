@@ -1,6 +1,6 @@
 CFLAGS = gcc
 CC = -ansi -Wall -pedantic
-OBJ = main.o ds_memory.o ds_array.o
+OBJ = main.o ds_memory.o ds_list.o
 DEP = ds_memory.h ds_array.h
 
 all: $(OBJ)

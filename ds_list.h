@@ -11,4 +11,5 @@ int ds_delete(long index);
 int ds_swap(long index1, long index2);
 long ds_find(int target);
 int ds_read_elements(char *filename);
+void show_list();
 int ds_finish_list();
