@@ -161,9 +161,8 @@ int ds_finish() {
     return 3;
   }
 
-  /*printf("reads: %d\n",ds_counts.reads);
-  printf("writes: %d\n", ds_counts.writes);*/
-  printf("%d, %d\n", ds_counts.reads, ds_counts.writes);
+  printf("reads: %d\n",ds_counts.reads);
+  printf("writes: %d\n", ds_counts.writes);
 
   return 0;
 }
