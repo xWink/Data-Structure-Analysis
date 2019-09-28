@@ -166,13 +166,104 @@ int ds_delete(long index) {
   if (ds_write(previousLoc, &previous, sizeof(previous)) == -1) {
     return 8;
   }
-  
+
   return 0;
 }
 
 
-int ds_swap(long index1, long index2);
-long ds_find(int target);
+int ds_swap(long index1, long index2) {
+
+  struct ds_list_item_struct first;
+  struct ds_list_item_struct second;
+  long firstLoc = 0;
+  long secondLoc = 0;
+  long temp;
+  int i;
+
+  if (index1 < 0 || index2 < 0) {
+    return 1;
+  }
+
+  if (index1 == index2) {
+    return 0;
+  }
+
+  if (index1 > index2) {
+    int holder = index1;
+    index1 = index2;
+    index2 = holder;
+  }
+
+  if (ds_read(&(first.next), 0, sizeof(first.next)) == NULL) {
+    return 2;
+  }
+
+  /*Find index1's address and save the struct to previous*/
+  for (i = index1; i >= 0; i--) {
+    if (first.next == -1) {
+      return 3;
+    }
+    firstLoc = first.next;
+    if (ds_read(&first, first.next, sizeof(first)) == NULL) {
+      return 4;
+    }
+  }
+
+  second.next = first.next;
+
+  /*Find index2's address, save the struct to new*/
+  for (i = index2 - index1; i > 0; i--) {
+    if (second.next == -1) {
+      return 6;
+    }
+    secondLoc = second.next;
+    if (ds_read(&second, second.next, sizeof(second)) == NULL) {
+      return 7;
+    }
+  }
+
+  /*Swap next values*/
+  temp = first.next;
+  first.next = second.next;
+  second.next = temp;
+
+  if (ds_write(firstLoc, &second, sizeof(second)) == -1) {
+    return 8;
+  }
+
+  if (ds_write(secondLoc, &first, sizeof(first)) == -1) {
+    return 9;
+  }
+
+  return 0;
+}
+
+
+long ds_find(int target) {
+
+  struct ds_list_item_struct targetStruct;
+  long targetLoc;
+
+  if (target < 0) {
+    return -1;
+  }
+
+  if (ds_read(&(targetStruct.next), 0, sizeof(targetStruct.next)) == NULL) {
+    return -1;
+  }
+
+  while (targetStruct.next != -1) {
+    targetLoc = targetStruct.next;
+    if (ds_read(&targetStruct, targetStruct.next, sizeof(targetStruct)) == NULL) {
+      return -1;
+    }
+    if (targetStruct.item == target) {
+      return targetLoc;
+    }
+  }
+
+  return -1;
+}
 
 
 /*TODO: SAY ASSUMING THIS IS THE CORRECT ORDER FOR INSERT*/
