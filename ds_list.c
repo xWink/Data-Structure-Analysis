@@ -1,28 +1,28 @@
 #include "ds_memory.h"
 #include "ds_list.h"
 
-int ds_create_list() {
+void ds_create_list() {
 
     long value = -1;
     long start;
 
     if (ds_init("list.bin") != 0) {
-      return 1;
+      return;
     }
 
     if ((start = ds_malloc(sizeof(value))) == -1) {
-      return 2;
+      return;
     }
 
     if (ds_write(start, &value, sizeof(value)) == -1) {
-      return 3;
+      return;
     }
 
     if (ds_finish() != 0) {
-      return 4;
+      return;
     }
 
-    return 0;
+    return;
 }
 
 

@@ -3,7 +3,7 @@ struct ds_list_item_struct {
   long next;
 };
 
-int ds_create_list();
+void ds_create_list();
 int ds_init_list();
 int ds_replace(int value, long index);
 int ds_insert(int value, long index);
