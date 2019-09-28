@@ -146,7 +146,7 @@ long ds_write(long start, void* ptr, long bytes) {
   return start;
 }
 
-
+/*TODO: REPLACE OUTPUT TO BE CORRECT*/
 int ds_finish() {
 
   if (fseek(ds_file.fp, 0, SEEK_SET) != 0) {
@@ -161,8 +161,9 @@ int ds_finish() {
     return 3;
   }
 
-  printf("reads: %d\n",ds_counts.reads);
-  printf("writes: %d\n", ds_counts.writes);
+  /*printf("reads: %d\n",ds_counts.reads);
+  printf("writes: %d\n", ds_counts.writes);*/
+  printf("%d, %d\n", ds_counts.reads, ds_counts.writes);
 
   return 0;
 }

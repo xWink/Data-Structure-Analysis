@@ -76,7 +76,6 @@ int ds_insert(int value, long index) {
     if (ds_write(i * sizeof(int) + sizeof(elements), &new, sizeof(int)) == -1) {
       return 3;
     }
-    printf("Element %d: %d\n", i, new);
     new = old;
   }
 
@@ -104,7 +103,6 @@ int ds_delete(long index) {
     if (ds_write(i * sizeof(int) + sizeof(elements), &old, sizeof(int)) == -1) {
       return 4;
     }
-    printf("Element %d: %d\n", i, new);
     old = new;
   }
 
@@ -121,6 +119,10 @@ int ds_swap(long index1, long index2) {
     || index2 >= elements || index2 < 0) {
 
     return 1;
+  }
+
+  if (index1 == index2) {
+    return 0;
   }
 
   ds_read(&var1, index1 * sizeof(int) + sizeof(elements), sizeof(int));
