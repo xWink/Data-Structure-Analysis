@@ -1,16 +1,8 @@
 CFLAGS = gcc
 CC = -ansi -Wall -pedantic
-OBJ = main.o ds_memory.o ds_array.o
-DEP = ds_memory.h ds_array.h
+OBJ = ds_memory.o ds_array.o ds_list.o
 
 all: $(OBJ)
-	$(CFLAGS) $(OBJ) -o run
 
-%.o: %.c $(DEP)
+%.o: %.c %.h ds_memory.h
 	$(CFLAGS) $(CC) -c $< -o $@
-
-run: all
-	./run
-
-clean: $(OBJ)
-	rm $(OBJ) run
