@@ -1,5 +1,6 @@
 /**
 * Author: Shawn Kaplan (0966499)
+* Email: skaplan@uoguelph.ca
 * Date: September 29, 2019
 *
 * An assumption is made for where ds_insert is meant
