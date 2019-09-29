@@ -1,9 +1,10 @@
 /**
 * Author: Shawn Kaplan (0966499)
+* Email: skaplan@uoguelph.ca
 * Date: September 29, 2019
 *
-* IS IT ASSUMED THAT THIS FILE DOES NOT NEED
-* TO INCLUDE ds_memory.h
+* It is assumed that this file does not
+* need to include ds_memory.h
 */
 
 #define MAX_ELEMENTS 256
