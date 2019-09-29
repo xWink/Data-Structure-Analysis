@@ -1,5 +1,6 @@
 /**
 * Author: Shawn Kaplan
+* Email: skaplan@uoguelph.ca
 * Date: September 29, 2019
 */
 #include <stdio.h>
