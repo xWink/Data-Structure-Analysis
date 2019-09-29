@@ -1,3 +1,11 @@
+/**
+* Author: Shawn Kaplan (0966499)
+* Date: September 29, 2019
+*
+* IS IT ASSUMED THAT THIS FILE DOES NOT NEED
+* TO INCLUDE ds_memory.h
+*/
+
 struct ds_list_item_struct {
   int item;
   long next;
@@ -11,5 +19,4 @@ int ds_delete(long index);
 int ds_swap(long index1, long index2);
 long ds_find(int target);
 int ds_read_elements(char *filename);
-void show_list();
 int ds_finish_list();

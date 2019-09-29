@@ -1,3 +1,7 @@
+/**
+* Author: Shawn Kaplan
+* Date: September 29, 2019
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -27,4 +31,3 @@ void ds_free(long start);
 void *ds_read(void *ptr, long start, long bytes);
 long ds_write(long start, void* ptr, long bytes);
 int ds_finish();
-void ds_test_init();

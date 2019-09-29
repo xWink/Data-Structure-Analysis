@@ -1,3 +1,8 @@
+/**
+* Author: Shawn Kaplan (0966499)
+* Date: September 29, 2019
+*/
+
 #include "ds_memory.h"
 
 struct ds_file_struct ds_file;
@@ -59,19 +64,6 @@ int ds_init (char* filename) {
 }
 
 
-void ds_test_init() {
-
-  int i;
-  for (i = 0; i < 100; i++) {
-    printf("%d: %lu, %lu, %d      ", i, ds_file.block[i].start, ds_file.block[i].length, ds_file.block[i].alloced);
-    if (i % 3 == 0 && i != 0) {
-      printf("\n");
-    }
-  }
-  printf("\nreads: %d\nwrites: %d\n", ds_counts.reads, ds_counts.writes);
-}
-
-
 long ds_malloc(long amount) {
 
   long originalStart = -1;
@@ -125,10 +117,13 @@ void *ds_read(void *ptr, long start, long bytes) {
   if (fseek(ds_file.fp, sizeof(ds_file.block) + start, SEEK_SET) != 0) {
     return NULL;
   }
+  
   if (fread(ptr, bytes, 1, ds_file.fp) < 1) {
     return NULL;
   }
+  
   ds_counts.reads++;
+  
   return ptr;
 }
 
@@ -138,9 +133,11 @@ long ds_write(long start, void* ptr, long bytes) {
   if (fseek(ds_file.fp, sizeof(ds_file.block) + start, SEEK_SET) != 0) {
     return -1;
   }
+  
   if (fwrite(ptr, bytes, 1, ds_file.fp) < 1) {
     return -1;
   }
+  
   ds_counts.writes++;
 
   return start;

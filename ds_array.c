@@ -1,27 +1,42 @@
+/**
+* Author: Shawn Kaplan (0966499)
+* Date: September 29, 2019
+*
+* An assumption is made for where ds_insert is meant
+* to place new elements into the file
+*/
+
 #include "ds_memory.h"
 #include "ds_array.h"
 
 long elements;
 
 int ds_create_array() {
+	
   long start;
 
   if (ds_init("array.bin") != 0) {
     return 1;
   }
+  
   elements = 0;
+  
   if ((start = ds_malloc(sizeof(long))) == -1) {
     return 2;
   }
+  
   if (ds_write(start, &elements, sizeof(elements)) == -1) {
     return 3;
   }
+  
   if (ds_malloc(sizeof(int)*MAX_ELEMENTS) == -1) {
     return 4;
   }
+  
   if (ds_finish() != 0) {
     return 5;
   }
+  
   return 0;
 }
 
@@ -49,6 +64,7 @@ int ds_replace(int value, long index) {
   if (ds_write(index * sizeof(int) + sizeof(elements), &value, sizeof(int)) == -1) {
     return 2;
   }
+  
   return 0;
 }
 
@@ -73,6 +89,7 @@ int ds_insert(int value, long index) {
     if (ds_read(&old, i * sizeof(int) + sizeof(elements), sizeof(int)) == NULL) {
       return 2;
     }
+	
     if (ds_write(i * sizeof(int) + sizeof(elements), &new, sizeof(int)) == -1) {
       return 3;
     }
@@ -80,10 +97,12 @@ int ds_insert(int value, long index) {
   }
 
   elements++;
+  
   return 0;
 }
 
 int ds_delete(long index) {
+	
   int old;
   int new;
   int i;
@@ -150,7 +169,7 @@ long ds_find(int target) {
   return -1;
 }
 
-/*ASSUMING THIS IS THE CORRECT ORDER AND LOCATION FOR INSERT*/
+
 int ds_read_elements(char *filename) {
 
   int val;
@@ -166,24 +185,15 @@ int ds_read_elements(char *filename) {
 }
 
 
-void create_array() {
-  ds_create("array.bin", 2048);
-  ds_create_array();
-}
-
-
-void show_array() {
-  ds_test_init();
-  printf("elements = %ld\n", elements);
-}
-
-
 int ds_finish_array() {
+	
   if (ds_write(0, &elements, sizeof(elements)) == -1) {
     return 1;
   }
+  
   if (ds_finish() != 0) {
     return 2;
   }
+  
   return 0;
 }

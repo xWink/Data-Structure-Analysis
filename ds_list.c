@@ -1,3 +1,12 @@
+/**
+* Author: Shawn Kaplan (0966499)
+* Date: September 29, 2019
+*
+* An assumption is made for the specific order in which
+* ds_insert places new nodes and for the order in which
+* ds_read_elements reads new nodes into the file
+*/
+
 #include "ds_memory.h"
 #include "ds_list.h"
 
@@ -85,7 +94,9 @@ int ds_insert(int value, long index) {
     if (previous.next == -1) {
       return 3;
     }
+	
     previousLoc = previous.next;
+
     if (ds_read(&previous, previous.next, sizeof(previous)) == NULL) {
       return 4;
     }
@@ -106,7 +117,9 @@ int ds_insert(int value, long index) {
     if (ds_write(previousLoc, &(previous.next), sizeof(previous.next)) == -1) {
       return 7;
     }
-  } else {
+  }
+  
+  else {
     if (ds_write(previousLoc, &previous, sizeof(previous)) == -1) {
       return 8;
     }
@@ -149,7 +162,9 @@ int ds_delete(long index) {
     if (previous.next == -1) {
       return 5;
     }
+	
     previousLoc = previous.next;
+	
     if (ds_read(&previous, previous.next, sizeof(previous)) == NULL) {
       return 6;
     }
@@ -203,7 +218,9 @@ int ds_swap(long index1, long index2) {
     if (first.next == -1) {
       return 3;
     }
+	
     firstLoc = first.next;
+	
     if (ds_read(&first, first.next, sizeof(first)) == NULL) {
       return 4;
     }
@@ -216,7 +233,9 @@ int ds_swap(long index1, long index2) {
     if (second.next == -1) {
       return 6;
     }
+	
     secondLoc = second.next;
+	
     if (ds_read(&second, second.next, sizeof(second)) == NULL) {
       return 7;
     }
@@ -254,9 +273,11 @@ long ds_find(int target) {
 
   while (targetStruct.next != -1) {
     targetLoc = targetStruct.next;
+	
     if (ds_read(&targetStruct, targetStruct.next, sizeof(targetStruct)) == NULL) {
       return -1;
     }
+	
     if (targetStruct.item == target) {
       return targetLoc;
     }
@@ -266,7 +287,6 @@ long ds_find(int target) {
 }
 
 
-/*TODO: SAY ASSUMING THIS IS THE CORRECT ORDER FOR INSERT*/
 int ds_read_elements(char *filename) {
 
   int val;
@@ -279,21 +299,6 @@ int ds_read_elements(char *filename) {
   }
 
   return 0;
-}
-
-void show_list() {
-
-  struct ds_list_item_struct li;
-  long loc;
-
-  ds_test_init();
-  ds_read(&loc, 0, sizeof(loc));
-
-  do {
-    ds_read(&li, loc, sizeof(li));
-    printf("Next: %ld, Item: %d\n", li.next, li.item);
-    loc = li.next;
-  } while (loc != -1);
 }
 
 
