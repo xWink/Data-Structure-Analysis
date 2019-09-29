@@ -1,5 +1,6 @@
 /**
 * Author: Shawn Kaplan (0966499)
+* Email: skaplan@uoguelph.ca
 * Date: September 29, 2019
 */
 
