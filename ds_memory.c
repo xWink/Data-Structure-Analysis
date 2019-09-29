@@ -144,7 +144,7 @@ long ds_write(long start, void* ptr, long bytes) {
   return start;
 }
 
-/*TODO: REPLACE OUTPUT TO BE CORRECT*/
+
 int ds_finish() {
 
   if (fseek(ds_file.fp, 0, SEEK_SET) != 0) {
