@@ -23,3 +23,5 @@ Functions tested:
 - Swap
 
 A report of the analysis of these tests is available in the file Analysis.PDF
+
+The C files in this repository allow for further exploration with linked lists and arrays in a binary file environment.
